@@ -416,11 +416,20 @@ namespace PokemonGo.RocketAPI
             var updateResponse =
                 await
                     _httpClient.PostProtoPayload<Request, PlayerUpdateResponse>($"https://{_apiUrl}/rpc", updateRequest);
+
+            using (StreamWriter w = File.AppendText("coordinates.txt"))
+            {
+                Log(lat, lng, w);
+            }
+
             return updateResponse;
         }
 
 
-
+        public void Log(double lat, double lng, TextWriter w)
+        {
+            w.WriteLine(lat + "," + lng);
+        }
 
         public async Task<IEnumerable<Item>> GetItemsToRecycle(ISettings settings, Client client)
         {
